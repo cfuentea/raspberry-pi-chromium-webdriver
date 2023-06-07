@@ -52,10 +52,8 @@ try:
         
 except Exception():
     print('Error')
+
+finally:
     driver.quit()
     display.stop()
     archivo.close()
- 
-driver.quit()
-display.stop()
-archivo.close()
