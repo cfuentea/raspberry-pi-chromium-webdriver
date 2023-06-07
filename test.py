@@ -16,7 +16,7 @@ from selenium import webdriver
 from pyvirtualdisplay import Display
 import psutil, os, signal
 
-archivo = open('/tmp/sitiosweb.txt','r')
+archivo = open('/tmp/sitios.txt','r')
 hoy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 
 display = Display(visible=0, size=(1600, 1200))
