@@ -14,9 +14,7 @@ from time import sleep
 from datetime import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
-import psutil, os, signal
 
-archivo = open('/tmp/sitios.txt','r')
 hoy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 
 display = Display(visible=0, size=(1600, 1200))
@@ -38,22 +36,21 @@ driver.implicitly_wait(10)
 sleep(randint(5,30))
 
 try:
-    for web in archivo:
-        web = web.strip()
-        driver.get(web)
-        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
-        responseStart = driver.execute_script("return window.performance.timing.responseStart")
-        domComplete = driver.execute_script("return window.performance.timing.domComplete")
-        backendPerformance_calc = (responseStart - navigationStart)/1000
-        frontendPerformance_calc = (domComplete - responseStart)/1000
-        data = '{"fecha_evento":"'+str(hoy)+'","sitioWeb":"'+str(web)+'","t_backend_seg":"'+ \
-                str(backendPerformance_calc)+'","t_frontend_seg":"'+str(frontendPerformance_calc)+'"}' 
-        print(data)
+    with open('/tmp/sitios.txt','r') as archivo:
+        for web in archivo:
+            web = web.strip()
+            driver.get(web)
+            navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
+            responseStart = driver.execute_script("return window.performance.timing.responseStart")
+            domComplete = driver.execute_script("return window.performance.timing.domComplete")
+            backendPerformance_calc = (responseStart - navigationStart)/1000
+            frontendPerformance_calc = (domComplete - responseStart)/1000
+            data = f'{{"fecha_evento":"{hoy}","sitioWeb":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
+            print(data)
         
-except Exception():
-    print('Error')
+except Exception as e:
+    print(f'Error: {e}')
 
 finally:
     driver.quit()
     display.stop()
-    archivo.close()
