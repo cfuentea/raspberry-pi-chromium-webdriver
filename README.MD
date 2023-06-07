@@ -1,4 +1,4 @@
-Docker image to run Python Selenium with Chromium on Raspberry Pi
+Docker image to run Python Selenium with Chromium on Raspberry Pi (v8)
 
 # Usage
 1. Install Docker on Raspberry Pi ([Guia oficial de instalación](https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/))
