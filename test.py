@@ -44,7 +44,7 @@ try:
             domComplete = driver.execute_script("return window.performance.timing.domComplete")
             backendPerformance_calc = (responseStart - navigationStart)/1000
             frontendPerformance_calc = (domComplete - responseStart)/1000
-            data = f'{{"server_name":"{server_name}","fecha_evento":"{hoy}","sitioWeb":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
+            data = f'{{"server_name":"{server_name}","timestamp":"{hoy}","url":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
             print(data)
         
 except Exception as e:
