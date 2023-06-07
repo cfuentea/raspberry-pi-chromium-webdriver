@@ -14,17 +14,16 @@ from time import sleep
 from datetime import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
+import socket
 
 hoy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+server_name = socket.gethostname()
 
 display = Display(visible=0, size=(1600, 1200))
 display.start()
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--headless')
-
-# version local de sonda con chromium via snap
-#driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', options=chrome_options)
 
 # version script ejecutado en ontenedor
 driver = webdriver.Chrome(options=chrome_options)
@@ -45,7 +44,7 @@ try:
             domComplete = driver.execute_script("return window.performance.timing.domComplete")
             backendPerformance_calc = (responseStart - navigationStart)/1000
             frontendPerformance_calc = (domComplete - responseStart)/1000
-            data = f'{{"fecha_evento":"{hoy}","sitioWeb":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
+            data = f'{{"server_name":"{server_name}","fecha_evento":"{hoy}","sitioWeb":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
             print(data)
         
 except Exception as e:
