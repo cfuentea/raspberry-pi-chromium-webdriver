@@ -7,3 +7,5 @@ Docker image to run Python Selenium with Chromium on Raspberry Pi (v8)
 ```
 docker run --rm -w /tmp -v $(pwd):/tmp cfuentealba/chromium-arm64:0.1 python3 test.py
 ```
+
+Dockerhub Image: https://hub.docker.com/r/cfuentealba/chromium-arm64
