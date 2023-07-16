@@ -4,8 +4,9 @@ Imagen en Docker y script en Python para realizar pruebas de navegación utiliza
 1. Instalar Docker en Raspberry Pi ([Guia oficial de instalación](https://www.raspberrypi.org/blog/docker-comes-to-raspberry-pi/))
 2. Clonar este repositorio.
 3. Prueba la imagen y el script utilizando el siguiente comando:
+
 ```
-docker run --rm -w /tmp -v $(pwd):/tmp cfuentealba/chromium-arm64:0.1 python3 test.py
+docker run --rm -w /tmp -v $(pwd):/tmp -e HOSTNAME=$(hostname) cfuentealba/chromium-arm64:latest python3 test.py
 ```
 
 Imagen en Dockerhub: https://hub.docker.com/r/cfuentealba/chromium-arm64
