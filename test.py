@@ -4,7 +4,21 @@ from time import sleep
 from datetime import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
-import socket, requests, io
+from pymongo import MongoClient
+import socket, json, requests, io
+
+# conexion a la base de datos
+try:
+    client = MongoClient('mongodb+srv://<usuario>:<password>@<hostname>/?retryWrites=true&w=majority')
+
+# error en caso de no poder conectar
+except pymongo.errors.ConfigurationError:
+    print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
+    sys.exit(1)
+
+db = client.Cluster0
+
+collection = db["sitiosWeb"]
 
 # formato normalizado de fecha
 hoy = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
@@ -42,8 +56,14 @@ except (requests.RequestException, ValueError):
             domComplete = driver.execute_script("return window.performance.timing.domComplete")
             backendPerformance_calc = (responseStart - navigationStart)/1000
             frontendPerformance_calc = (domComplete - responseStart)/1000
-            data = f'{{"server_name":"{server_name}","timestamp":"{hoy}","url":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
-            print('opcion A: ' + data)
+            data_dict = {
+                    "server_name": server_name,
+                    "timestamp": hoy,
+                    "url": web,
+                    "t_backend_seg": backendPerformance_calc,
+                    "t_frontend_seg": frontendPerformance_calc
+                    }
+            collection.insert_one(data_dict)
 else:
     for web in io.StringIO(response.text):
         web = web.strip()
@@ -53,8 +73,14 @@ else:
         domComplete = driver.execute_script("return window.performance.timing.domComplete")
         backendPerformance_calc = (responseStart - navigationStart)/1000
         frontendPerformance_calc = (domComplete - responseStart)/1000
-        data = f'{{"server_name":"{server_name}","timestamp":"{hoy}","url":"{web}","t_backend_seg":"{backendPerformance_calc}","t_frontend_seg":"{frontendPerformance_calc}"}}'
-        print('opcion B: ' +data)
+        data_dict = {
+                    "server_name": server_name,
+                    "timestamp": hoy,
+                    "url": web,
+                    "t_backend_seg": backendPerformance_calc,
+                    "t_frontend_seg": frontendPerformance_calc
+                }
+        collection.insert_one(data_dict)
 finally:
     driver.quit()
     display.stop()
