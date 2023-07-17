@@ -6,7 +6,7 @@ Imagen en Docker y script en Python para realizar pruebas de navegación utiliza
 3. Prueba la imagen y el script utilizando el siguiente comando:
 
 ```
-docker run --rm -w /tmp -v $(pwd):/tmp -e HOSTNAME=$(hostname) cfuentealba/chromium-arm64:latest python3 test.py
+docker run --rm -w /tmp -v $(pwd):/tmp -h $(hostname) cfuentealba/chromium-arm64:latest python3 test.py
 ```
 
 Imagen en Dockerhub: https://hub.docker.com/r/cfuentealba/chromium-arm64
