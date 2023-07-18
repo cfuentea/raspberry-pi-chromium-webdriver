@@ -40,7 +40,7 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(options=chrome_options)
 driver.implicitly_wait(10)
 
-def measure_web_performance(driver, web, server_name, hoy):
+def prueba_medicion(driver, web, server_name, hoy):
     try:
         web = web.strip()
         driver.get(web)
