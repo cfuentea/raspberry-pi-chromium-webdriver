@@ -40,7 +40,7 @@ Acá se describe la secuencias de eventos que ocurren cuando se carga una págin
 
 - **navigationStart**: Comienza la navegación. Esto es cuando el usuario ha ingresado una URL o ha hecho clic en un enlace para cargar una nueva página web.
 - **redirectStart y redirectEnd**: Si hay una redirección (por ejemplo, la URL original redirige a otra URL), estos eventos marcan el inicio y el fin de la redirección.
-- **fetchStart*: Comienza la búsqueda de la página web en el servidor.
+- **fetchStart**: Comienza la búsqueda de la página web en el servidor.
 - **domainLookupStart y domainLookupEnd**: Se inicia y se finaliza la búsqueda del dominio. Esto se refiere al proceso de encontrar la dirección IP del servidor que aloja la página web.
 - **connectStart y connectEnd**: Se inicia y se finaliza la conexión al servidor. Esto es cuando el navegador está estableciendo una conexión con el servidor que aloja la página web.
 - **requestStart**: Comienza la solicitud de la página web. El navegador ha solicitado la página web al servidor.
