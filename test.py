@@ -40,6 +40,27 @@ chrome_options.add_argument('--headless')
 driver = webdriver.Chrome(options=chrome_options)
 driver.implicitly_wait(10)
 
+def measure_web_performance(driver, web, server_name, hoy):
+    try:
+        web = web.strip()
+        driver.get(web)
+        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
+        responseStart = driver.execute_script("return window.performance.timing.responseStart")
+        domComplete = driver.execute_script("return window.performance.timing.domComplete")
+        backendPerformance_calc = (responseStart - navigationStart)/1000
+        frontendPerformance_calc = (domComplete - responseStart)/1000
+        data_dict = {
+                "server_name": server_name,
+                "timestamp": hoy,
+                "url": web,
+                "t_backend_seg": backendPerformance_calc,
+                "t_frontend_seg": frontendPerformance_calc
+            }
+        return data_dict
+    except selenium.common.exceptions.WebDriverException as e:
+        print(f'Ocurrio un error al acceder a la {web}: {str(e)}')
+        return None
+
 # espera variable para evitar parecer un robot
 sleep(randint(5,30))
 
@@ -49,38 +70,21 @@ try:
 except (requests.RequestException, ValueError):
     with open('/tmp/sitios.txt','r') as archivo:
         for web in archivo:
-            web = web.strip()
-            driver.get(web)
-            navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
-            responseStart = driver.execute_script("return window.performance.timing.responseStart")
-            domComplete = driver.execute_script("return window.performance.timing.domComplete")
-            backendPerformance_calc = (responseStart - navigationStart)/1000
-            frontendPerformance_calc = (domComplete - responseStart)/1000
-            data_dict = {
-                    "server_name": server_name,
-                    "timestamp": hoy,
-                    "url": web,
-                    "t_backend_seg": backendPerformance_calc,
-                    "t_frontend_seg": frontendPerformance_calc
-                    }
+            try:
+                data_dict = prueba_medicion(driver, web, server_name, hoy)
+            except selenium.common.exceptions.WebDriverException as e:
+                print(f'Ocurrio un error al cargar la pagina: {e}')
+                data_dict = prueba_medicion(driver, web, server_name, hoy)
             collection.insert_one(data_dict)
 else:
     for web in io.StringIO(response.text):
-        web = web.strip()
-        driver.get(web)
-        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
-        responseStart = driver.execute_script("return window.performance.timing.responseStart")
-        domComplete = driver.execute_script("return window.performance.timing.domComplete")
-        backendPerformance_calc = (responseStart - navigationStart)/1000
-        frontendPerformance_calc = (domComplete - responseStart)/1000
-        data_dict = {
-                    "server_name": server_name,
-                    "timestamp": hoy,
-                    "url": web,
-                    "t_backend_seg": backendPerformance_calc,
-                    "t_frontend_seg": frontendPerformance_calc
-                }
+        try:
+            data_dict = prueba_medicion(driver, web, server_name, hoy)
+        except selenium.common.exceptions.WebDriverException as e:
+            print(f'Ocurrio un error al cargar la pagina: {e}')
+            data_dict = prueba_medicion(driver, web, server_name, hoy)
         collection.insert_one(data_dict)
 finally:
     driver.quit()
     display.stop()
+    client.close()
