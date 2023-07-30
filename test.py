@@ -35,10 +35,13 @@ display.start()
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-extensions')
+#chrome_options.add_argument('--disable-dev-shm-usage')
 
 # version script ejecutado en ontenedor
 driver = webdriver.Chrome(options=chrome_options)
-driver.implicitly_wait(10)
+#driver.implicitly_wait(10)
 
 def prueba_medicion(driver, web, server_name, hoy):
     try:
@@ -56,6 +59,7 @@ def prueba_medicion(driver, web, server_name, hoy):
                 "t_backend_seg": backendPerformance_calc,
                 "t_frontend_seg": frontendPerformance_calc
             }
+        driver.implicitly_wait(10)
         return data_dict
     except selenium.common.exceptions.WebDriverException as e:
         print(f'Ocurrio un error al acceder a la {web}: {str(e)}')
