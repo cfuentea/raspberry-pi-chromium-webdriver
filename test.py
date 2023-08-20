@@ -5,11 +5,21 @@ from datetime import datetime
 from selenium import webdriver
 from pyvirtualdisplay import Display
 from pymongo import MongoClient
-import socket, json, requests, io
+from dotenv import load_dotenv
+import socket, json, requests, io, os
+
+# carga de variables de entorno
+load_dotenv()
+
+db_host = os.getenv('DB_HOST')
+db_user = os.getenv('DB_USER')
+db_pass = os.getenv('DB_PASSWD')
+
+mongo_uri = f"mongodb+srv://{db_user}:{db_pass}@{db_host}/?retryWrites=true&w=majority"
 
 # conexion a la base de datos
 try:
-    client = MongoClient('mongodb+srv://<usuario>:<password>@<hostname>/?retryWrites=true&w=majority')
+    client = MongoClient(mongo_uri)
 
 # error en caso de no poder conectar
 except pymongo.errors.ConfigurationError:
