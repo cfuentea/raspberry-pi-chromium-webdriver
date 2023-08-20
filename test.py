@@ -3,6 +3,7 @@ from random import randint
 from time import sleep
 from datetime import datetime
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from pyvirtualdisplay import Display
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -71,7 +72,7 @@ def prueba_medicion(driver, web, server_name, hoy):
             }
         driver.implicitly_wait(10)
         return data_dict
-    except selenium.common.exceptions.WebDriverException as e:
+    except WebDriverException as e:
         print(f'Ocurrio un error al acceder a la {web}: {str(e)}')
         return None
 
@@ -86,7 +87,7 @@ except (requests.RequestException, ValueError):
         for web in archivo:
             try:
                 data_dict = prueba_medicion(driver, web, server_name, hoy)
-            except selenium.common.exceptions.WebDriverException as e:
+            except WebDriverException as e:
                 print(f'Ocurrio un error al cargar la pagina: {e}')
                 data_dict = prueba_medicion(driver, web, server_name, hoy)
             collection.insert_one(data_dict)
@@ -94,7 +95,7 @@ else:
     for web in io.StringIO(response.text):
         try:
             data_dict = prueba_medicion(driver, web, server_name, hoy)
-        except selenium.common.exceptions.WebDriverException as e:
+        except WebDriverException as e:
             print(f'Ocurrio un error al cargar la pagina: {e}')
             data_dict = prueba_medicion(driver, web, server_name, hoy)
         collection.insert_one(data_dict)
